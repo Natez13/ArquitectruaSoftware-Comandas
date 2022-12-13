@@ -22,11 +22,16 @@ class Pedido_Update(Service):
             if  db.query(Pedido).filter(Pedido.numero_mesa==numero, Pedido.terminado == False).first():
                 pedido = db.query(Pedido).filter(Pedido.numero_mesa == numero, Pedido.terminado == False).first()
                 pedplat = db.query(PedidoPlatillo).filter(PedidoPlatillo.id_pedido == pedido.id, PedidoPlatillo.id_plato == id_platillo).first()
-                #platillos.append(to_dict(pedplat))
-                #print(platillos)
-                pedplat.id_plato=id_platillo_new
-                db.commit()
-                db.close()
+                if id_platillo_new == '-1':
+                    db.delete(pedplat)
+                    db.commit()
+                    db.close()
+                else:
+                    #platillos.append(to_dict(pedplat))
+                    #print(platillos)
+                    pedplat.id_plato=id_platillo_new
+                    db.commit()
+                    db.close()
                 return 'Se modifico el platillo a la mesa numero '+str(numero)#+' asignada'#+' con pedido id: '+str(pedido_id.id)
             else:
                 db.close()
